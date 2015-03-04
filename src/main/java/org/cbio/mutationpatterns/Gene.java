@@ -22,6 +22,7 @@ public class Gene
 
 	Gene(String name, CBioPortalAccessor acc, ExpDataManager expMan)
 	{
+		this.name = name;
 		CBioPortalManager man = acc.getManager();
 		for (GeneticProfile gp : acc.getCurrentGeneticProfiles())
 		{
@@ -93,12 +94,12 @@ public class Gene
 		return b;
 	}
 
-	public boolean[] getDiploid()
+	public boolean[] getCNV(int val)
 	{
 		boolean[] b = new boolean[cnv.length];
 		for (int i = 0; i < b.length; i++)
 		{
-			b[i] = !cnv[i].equals("NaN") && Integer.parseInt(cnv[i]) == 0;
+			b[i] = !cnv[i].equals("NaN") && Integer.parseInt(cnv[i]) == val;
 		}
 		return b;
 	}

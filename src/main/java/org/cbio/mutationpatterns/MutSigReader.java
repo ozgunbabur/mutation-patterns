@@ -2,9 +2,6 @@ package org.cbio.mutationpatterns;
 
 import org.cbio.causality.data.portal.*;
 import org.cbio.causality.idmapping.HGNC;
-import org.cbio.causality.model.Alteration;
-import org.cbio.causality.model.AlterationPack;
-import org.cbio.causality.model.Change;
 import org.cbio.causality.util.*;
 
 import java.io.*;
@@ -346,7 +343,7 @@ public class MutSigReader
 	/**
 	 * @param qval if true, then qval is used, else pval is used
 	 */
-	public static Map<String, Double> readGenesSignificanceFromMutsig(String study, boolean qval)
+	public static Map<String, Double> readGenesSignificance(String study, boolean qval)
 	{
 		ensureStudyCached(study);
 
@@ -376,15 +373,9 @@ public class MutSigReader
 		for (PortalDatasetEnum dataEnum : PortalDatasetEnum.values())
 		{
 			System.out.println("dataEnum = " + dataEnum);
-			Map<String, Double> map = readGenesSignificanceFromMutsig(dataEnum.name(), false);
-
-			Histogram h = new Histogram(0.01);
-			h.setBorderAtZero(true);
-			for (Double val : map.values())
-			{
-				h.count(val);
-			}
-			h.printDensity();
+			Map<String, Double> map = readGenesSignificance(dataEnum.name(), false);
+			List<String> select = FDR.select(map, null, 0.1);
+			System.out.println("select = " + select);
 			System.out.println("\n");
 		}
 	}
